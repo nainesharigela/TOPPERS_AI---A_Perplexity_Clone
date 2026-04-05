@@ -1,0 +1,24 @@
+# Secrets and environment variables
+.env
+
+# Python caches and local files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Database
+*.db
+!toppers_bi_schema.sql  # Optional: ignore the DB but keep the schema if you have one
+
+# Project specific
+.gemini/
+.idea/
+.vscode/
+node_modules/
+
+# Logs
+*.log

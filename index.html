@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topper's AI — Business Intelligence</title>
+    <meta name="description" content="AI-powered search engine with competitor price tracking and business intelligence reports.">
+    <!-- Modern Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Animated Dark Theme Space Background -->
+    <div id="space-background" class="space-background">
+        <!-- Nebulas -->
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+        
+        <!-- Stars Layers -->
+        <div id="stars-small" class="stars stars-small"></div>
+        <div id="stars-medium" class="stars stars-medium"></div>
+        <div id="stars-large" class="stars stars-large"></div>
+        
+        <!-- Shooting Stars Container -->
+        <div id="shooting-stars-container"></div>
+    </div>
+
+    <!-- Light Theme Cloud Backgrounds -->
+    <div class="clouds-container">
+        <div class="cloud cloud-1"><i class="fa-solid fa-cloud"></i></div>
+        <div class="cloud cloud-2"><i class="fa-solid fa-cloud"></i></div>
+        <div class="cloud cloud-3"><i class="fa-solid fa-cloud"></i></div>
+        <div class="cloud cloud-4"><i class="fa-solid fa-cloud"></i></div>
+    </div>
+
+    <!-- Theme Switcher Floating Button -->
+    <div class="theme-switcher-wrapper">
+        <button id="theme-btn" class="theme-btn" title="Change Color Theme">
+            <i class="fa-solid fa-palette"></i>
+        </button>
+        <div id="theme-menu" class="theme-menu hidden">
+            <div class="color-option" data-color="default" style="--opts-color: #15ce18; --opts-accent: #2c2c2c;"></div>
+            <div class="color-option" data-color="blue" style="--opts-color: #2caaca; --opts-accent: #1b263b;"></div>
+            <div class="color-option" data-color="purple" style="--opts-color: #6d33b8; --opts-accent: #3b1b54;"></div>
+            <div class="color-option" data-color="green" style="--opts-color: #cf1bbd; --opts-accent: #1b543b;"></div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- Top Header -->
+        <header class="top-header">
+            <button class="header-btn"><i class="fa-regular fa-image"></i> Imagine</button>
+            <button class="header-btn"><i class="fa-solid fa-gear"></i></button>
+            <button id="theme-toggle-btn" class="header-btn" title="Toggle Light/Dark Theme"><i class="fa-solid fa-sun"></i></button>
+            <button id="sign-in-trigger" class="header-btn outline">Sign in</button>
+            <button class="header-btn filled">Sign up</button>
+        </header>
+
+        <!-- Left Sidebar (Recent Chats) -->
+        <nav class="sidebar sidebar-left">
+            <div class="logo-area">
+                <i class="fa-solid fa-asterisk logo-icon"></i>
+                <span class="logo-text">TOPPERS AI</span>
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item active" data-view="search" id="nav-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Search</span>
+                </li>
+                <li class="nav-item" data-view="competitors" id="nav-competitors">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Competitors</span>
+                </li>
+                <li class="nav-item" data-view="reports" id="nav-reports">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    <span>Reports</span>
+                </li>
+                <li class="nav-item" data-view="trends" id="nav-trends">
+                    <i class="fa-solid fa-fire-trend-up"></i>
+                    <span>Market Trends</span>
+                </li>
+            </ul>
+
+            <button id="new-thread-btn" class="new-thread-btn">
+                <i class="fa-solid fa-plus"></i>
+                <span>New thread</span>
+            </button>
+
+            <ul class="nav-links secondary-nav">
+                <li class="nav-item">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>Computer</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fa-solid fa-ellipsis"></i>
+                    <span>More</span>
+                </li>
+            </ul>
+            ...
+            <div class="recent-section">
+                <div class="section-title">Recent</div>
+                <div id="recent-chats-list" class="recent-chats-list">
+                    <!-- Recent chats will be injected here -->
+                </div>
+                <div class="section-desc" id="no-history-msg">No recent history.</div>
+                <button id="clear-history-btn" class="clear-history-btn hidden">
+                    <i class="fa-solid fa-trash-can"></i> Clear All
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Chat Area -->
+        <main class="main-content" id="main-area">
+            
+            <div id="landing-view" class="landing-logo">
+                <i class="fa-solid fa-asterisk logo-icon"></i>
+                <h1>TOPPERS AI</h1>
+            </div>
+
+            <div id="chat-history-container" class="chat-history-container hidden"></div>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="file" id="pdf-upload" accept="application/pdf" class="hidden">
+                    <button id="upload-btn" class="action-btn" title="Upload PDF"><i class="fa-solid fa-paperclip"></i></button>
+                    <!-- Auto Web Search Toggle Button -->
+                    <button id="web-search-toggle" class="action-btn" title="Search the Web"><i class="fa-solid fa-globe"></i></button>
+                    
+                    <textarea placeholder="How can I help you today?" rows="1" id="search-input"></textarea>
+
+                    <div class="search-actions">
+                        <div class="auto-pill">Auto <i class="fa-solid fa-chevron-down small-icon"></i></div>
+                        <button class="action-btn"><i class="fa-solid fa-microphone"></i></button>
+                        <button class="action-btn"><i class="fa-solid fa-wave-square"></i></button>
+                    </div>
+                </div>
+
+                <!-- PDF context badge -->
+                <span id="doc-status" class="doc-status hidden" title="Click to view document">
+                    <span class="doc-name"></span>
+                    <i class="fa-solid fa-xmark remove-file-btn" id="remove-file-btn" title="Remove File"></i>
+                </span>
+
+                <!-- Web crawl context badge -->
+                <span id="web-status" class="web-status hidden" title="Web page context active">
+                    <i class="fa-solid fa-globe web-icon"></i>
+                    <span class="web-title"></span>
+                    <i class="fa-solid fa-xmark remove-web-btn" id="remove-web-btn" title="Remove Web Context"></i>
+                </span>
+                
+                <div class="dictate-note">
+                    <i class="fa-solid fa-microphone-slash"></i> New · Hold Ctrl+D to dictate
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!--  COMPETITORS VIEW (Hidden by Default)       -->
+            <!-- ============================================ -->
+            <div id="competitors-view" class="bi-view hidden">
+                <div class="bi-view-header">
+                    <div class="bi-view-title">
+                        <i class="fa-solid fa-store"></i>
+                        <h2>Competitor Tracker</h2>
+                    </div>
+                    <p class="bi-view-desc">Track competitor prices, products, and promotions in real-time</p>
+                </div>
+
+                <!-- Track New Competitor -->
+                <div class="bi-track-form">
+                    <div class="bi-track-input-wrapper">
+                        <i class="fa-solid fa-link"></i>
+                        <input type="text" id="competitor-url-input" placeholder="Enter competitor URL or brand name..." autocomplete="off">
+                        <button id="track-competitor-btn" class="bi-track-btn">
+                            <i class="fa-solid fa-radar"></i>
+                            <span>Track</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="bi-loading" class="bi-loading hidden">
+                    <i class="fa-solid fa-asterisk ai-spinner-logo" style="margin-bottom:12px;"></i>
+                    <div class="bi-loading-text ai-spinner-text">Crawling competitor site...</div>
+                    <div class="bi-loading-sub">Extracting products, prices, and availability</div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="bi-empty-state" class="bi-empty-state">
+                    <i class="fa-solid fa-binoculars"></i>
+                    <h3>No competitors tracked yet</h3>
+                    <p>Enter a competitor's website URL or brand name above to start tracking their products and prices.</p>
+                </div>
+
+                <!-- Competitor Cards Grid -->
+                <div id="competitor-cards" class="competitor-cards-grid hidden"></div>
+
+                <!-- Product Detail Panel (shown when a competitor is selected) -->
+                <div id="product-detail-panel" class="product-detail-panel hidden">
+                    <div class="product-detail-header">
+                        <button id="back-to-competitors" class="bi-back-btn">
+                            <i class="fa-solid fa-arrow-left"></i> Back
+                        </button>
+                        <div class="product-detail-title">
+                            <img id="detail-favicon" src="" alt="" class="detail-favicon">
+                            <h3 id="detail-comp-name">Competitor</h3>
+                        </div>
+                        <div class="product-detail-actions">
+                            <button id="recrawl-btn" class="bi-action-btn" title="Re-crawl now">
+                                <i class="fa-solid fa-arrows-rotate"></i> Re-crawl
+                            </button>
+                            <button id="schedule-btn" class="bi-action-btn secondary" title="Schedule recurring crawl">
+                                <i class="fa-regular fa-clock"></i> Schedule
+                            </button>
+                            <button id="ask-ai-toggle" class="bi-action-btn accent" title="Ask AI about this data">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Ask AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Question Input (hidden by default) -->
+                    <div id="ai-question-bar" class="ai-question-bar hidden">
+                        <input type="text" id="ai-question-input" placeholder='e.g. "Which products dropped in price?" or "What are their cheapest items?"'>
+                        <button id="ai-question-submit" class="bi-track-btn compact">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div id="ai-answer-box" class="ai-answer-box hidden"></div>
+
+                    <!-- Products Table -->
+                    <div id="products-table-wrapper" class="products-table-wrapper">
+                        <table id="products-table" class="products-table">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-sort="name">Product <i class="fa-solid fa-sort"></i></th>
+                                    <th class="sortable" data-sort="price">Price <i class="fa-solid fa-sort"></i></th>
+                                    <th>Discount</th>
+                                    <th>Stock</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody"></tbody>
+                        </table>
+                        <div id="products-empty" class="products-empty hidden">
+                            <i class="fa-solid fa-box-open"></i>
+                            <p>No products found on this page. Try a different URL with product listings.</p>
+                        </div>
+                    </div>
+
+                    <!-- Crawl Meta -->
+                    <div id="crawl-meta" class="crawl-meta"></div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!--  REPORTS VIEW (Hidden by Default)           -->
+            <!-- ============================================ -->
+            <div id="reports-view" class="bi-view hidden">
+                <div class="bi-view-header">
+                    <div class="bi-view-title">
+                        <i class="fa-solid fa-chart-bar"></i>
+                        <h2>Reports & Alerts</h2>
+                    </div>
+                    <p class="bi-view-desc">Price changes, new products, restocks — detected automatically</p>
+                </div>
+
+                <!-- Schedules Section -->
+                <div class="reports-section">
+                    <h3 class="reports-section-title"><i class="fa-regular fa-clock"></i> Active Schedules</h3>
+                    <div id="schedules-list" class="schedules-list">
+                        <div id="schedules-empty" class="bi-empty-inline">
+                            <i class="fa-solid fa-calendar-xmark"></i>
+                            <span>No scheduled crawls. Track a competitor and set up a schedule.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Timeline -->
+                <div class="reports-section">
+                    <h3 class="reports-section-title"><i class="fa-solid fa-timeline"></i> Change Reports</h3>
+                    <div id="reports-timeline" class="reports-timeline">
+                        <div id="reports-empty" class="bi-empty-inline">
+                            <i class="fa-solid fa-inbox"></i>
+                            <span>No change reports yet. Reports appear after a re-crawl detects changes.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Detail Modal -->
+                <div id="report-detail-modal" class="report-detail-modal hidden">
+                    <div class="report-detail-content">
+                        <div class="report-detail-header">
+                            <h3 id="report-detail-title">Report</h3>
+                            <button id="close-report-detail" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div id="report-detail-body" class="report-detail-body"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!--  MARKET TRENDS VIEW (Hidden by Default)      -->
+            <!-- ============================================ -->
+            <div id="trends-view" class="bi-view hidden">
+                <div class="bi-view-header">
+                    <div class="bi-view-title">
+                        <i class="fa-solid fa-fire-trend-up"></i>
+                        <h2>Market Trend Intelligence</h2>
+                    </div>
+                    <p class="bi-view-desc">Discover social sentiment, trending keywords, and competitor chatter in real-time</p>
+                </div>
+
+                <!-- Input Form -->
+                <div class="bi-track-form">
+                    <div class="bi-track-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <input type="text" id="trend-topic-input" placeholder="Enter product category, industry, or brand (e.g., 'skincare', 'running shoes')..." autocomplete="off">
+                        <button id="analyze-trend-btn" class="bi-track-btn">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Analyze</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="trend-loading" class="bi-loading hidden">
+                    <i class="fa-solid fa-asterisk ai-spinner-logo" style="margin-bottom:12px;"></i>
+                    <div class="bi-loading-text ai-spinner-text">Crawling public discussions...</div>
+                    <div class="bi-loading-sub">Analyzing Reddit, reviews, and news to extract sentiment and keywords</div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="trend-empty" class="bi-empty-state">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h3>No trends analyzed yet</h3>
+                    <p>Enter a topic above to discover what consumers are actively discussing.</p>
+                </div>
+
+                <!-- Results Panel -->
+                <div id="trend-results" class="trend-results hidden">
+                    
+                    <div class="trend-metrics">
+                        <!-- Sentiment Score Card -->
+                        <div class="trend-card score-card">
+                            <h4 class="tc-title">Consumer Sentiment</h4>
+                            <div class="score-ring-container">
+                                <svg class="score-ring" width="120" height="120">
+                                    <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                                    <circle class="ring-progress" id="sentiment-ring" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+                                </svg>
+                                <div class="score-value" id="sentiment-value">0%</div>
+                            </div>
+                            <div class="score-label" id="sentiment-label">Neutral</div>
+                        </div>
+
+                        <!-- Keywords & Mentions -->
+                        <div class="trend-card lists-card">
+                            <div class="lists-top">
+                                <h4 class="tc-title"><i class="fa-solid fa-tags"></i> Top Trending Keywords</h4>
+                                <div class="keywords-list" id="trend-keywords-list"></div>
+                            </div>
+                            <div class="lists-bottom">
+                                <h4 class="tc-title"><i class="fa-solid fa-bullhorn"></i> Competitor Mentions</h4>
+                                <div class="mentions-list" id="trend-mentions-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Summary -->
+                    <div class="trend-card summary-card">
+                        <h4 class="tc-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Trend Summary</h4>
+                        <div id="trend-summary-content" class="trend-summary-content"></div>
+                    </div>
+
+                    <!-- Follow-up Question UI -->
+                    <div class="trend-qa-section">
+                        <h4 class="tc-title">Deep Dive</h4>
+                        <div class="ai-question-bar">
+                            <input type="text" id="trend-qa-input" placeholder='e.g. "What are people complaining about in this category?"'>
+                            <button id="trend-qa-submit" class="bi-track-btn compact">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div id="trend-qa-answer" class="ai-answer-box hidden"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Right Sidebar (Sources) -->
+        <aside class="sidebar-right" id="sources-sidebar">
+            <div class="sidebar-right-header">
+                <h3 id="sources-sidebar-title">Sources</h3>
+                <button id="close-sources-btn" class="close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="sidebar-right-content">
+                <p class="sources-subtitle">Sources for this response</p>
+                <div id="sources-list-container" class="sources-vertical-list">
+                    <!-- Sources appended here -->
+                </div>
+            </div>
+        </aside>
+
+    <!-- Auth Overlay Modal -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <button id="close-auth" class="close-auth"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo">
+                <i class="fa-solid fa-asterisk star-icon"></i>
+            </div>
+            <h2>Sign in or create an account</h2>
+            <p>Save and sync your searches</p>
+
+            <div class="auth-buttons">
+                <button class="auth-btn google-btn">
+                    <i class="fa-brands fa-google"></i> Continue with Google
+                </button>
+                <button class="auth-btn apple-btn">
+                    <i class="fa-brands fa-apple"></i> Continue with Apple
+                </button>
+            </div>
+
+            <div class="email-divider">or</div>
+
+            <div class="email-auth">
+                <input type="email" id="auth-email" placeholder="Enter your email" class="email-input">
+                <button id="email-submit" class="auth-btn email-submit">Continue with email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Config Modal -->
+    <div id="schedule-modal" class="schedule-modal hidden">
+        <div class="schedule-modal-content">
+            <div class="schedule-modal-header">
+                <h3><i class="fa-regular fa-clock"></i> Schedule Recurring Crawl</h3>
+                <button id="close-schedule-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="schedule-modal-body">
+                <p class="schedule-modal-desc">Automatically re-crawl this competitor to detect price changes, new products, and restocks.</p>
+                <div class="schedule-freq-options">
+                    <button class="freq-option active" data-freq="daily">
+                        <i class="fa-solid fa-sun"></i>
+                        <span>Daily</span>
+                        <small>Every 24 hours</small>
+                    </button>
+                    <button class="freq-option" data-freq="weekly">
+                        <i class="fa-solid fa-calendar-week"></i>
+                        <span>Weekly</span>
+                        <small>Every 7 days</small>
+                    </button>
+                </div>
+                <button id="save-schedule-btn" class="bi-track-btn full-width">
+                    <i class="fa-solid fa-check"></i> Save Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <!-- PDF Viewer Modal -->
+    <div id="pdf-modal" class="pdf-modal hidden">
+        <div class="pdf-content">
+            <div class="pdf-header">
+                <span id="pdf-title">Document Preview</span>
+                <button id="close-pdf" class="close-pdf-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <iframe id="pdf-frame" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js"></script>
+    <script src="competitors.js"></script>
+    <script src="reports.js"></script>
+    <script src="trends.js"></script>
+
+    <!-- Cursor Particles Overlay -->
+    <canvas id="cursor-particles" class="cursor-particles"></canvas>
+</body>
+
+</html>
